@@ -1,0 +1,128 @@
+.cart-page{
+  background: var(--ivory);
+  min-height: 100vh;
+}
+
+.cart-wrap{
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 28px 22px 70px;
+}
+
+.cart-wrap h1{
+  font-family: var(--font-title);
+  color: var(--color-primary);
+  margin: 0 0 18px;
+}
+
+.cart-list{
+  display:flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.cart-item{
+  display:grid;
+  grid-template-columns: 140px 1fr 110px 140px 120px;
+  gap: 12px;
+  align-items:center;
+  background: rgba(255,255,255,0.85);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 10px;
+  box-shadow: var(--shadow);
+}
+
+.cart-item img{
+  width: 140px;
+  height: 100px;
+  object-fit: cover;
+  border-radius: 12px;
+  background: #eee;
+}
+
+.cart-title{
+  font-weight: 900;
+  color: var(--color-primary);
+}
+
+.cart-price{
+  opacity: .85;
+  margin-top: 4px;
+  font-weight: 800;
+}
+
+.cart-qty input{
+  width: 90px;
+  padding: 10px 10px;
+  border-radius: 12px;
+  border: 1px solid var(--border);
+  font-weight: 800;
+}
+
+.cart-sub{
+  font-weight: 900;
+  color: var(--color-accent);
+}
+
+.cart-remove{
+  background: transparent;
+  border: 1px solid rgba(200,0,0,0.25);
+  color: #b50000;
+  padding: 10px 12px;
+  border-radius: 12px;
+  cursor:pointer;
+  font-weight: 900;
+}
+
+.cart-footer{
+  margin-top: 18px;
+  padding: 16px;
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  background: rgba(255,255,255,0.75);
+}
+
+.cart-total{
+  display:flex;
+  justify-content: space-between;
+  align-items:center;
+  font-size: 18px;
+}
+
+.cart-actions{
+  display:flex;
+  gap: 10px;
+  margin-top: 12px;
+}
+
+.btn-outline{
+  flex: 1;
+  background: transparent;
+  border: 1px solid var(--border);
+  padding: 12px 14px;
+  border-radius: 14px;
+  font-weight: 900;
+  cursor:pointer;
+}
+
+.btn-solid{
+  flex: 2;
+  text-align:center;
+  background: var(--color-secondary);
+  color: var(--color-primary);
+  padding: 12px 14px;
+  border-radius: 14px;
+  font-weight: 900;
+  text-decoration:none;
+}
+
+@media (max-width: 860px){
+  .cart-item{
+    grid-template-columns: 120px 1fr 90px 1fr;
+    grid-template-areas:
+      "img info qty sub"
+      "img info remove remove";
+  }
+  .cart-remove{ grid-column: 3 / -1; }
+}

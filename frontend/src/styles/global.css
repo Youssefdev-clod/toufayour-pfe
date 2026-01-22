@@ -1,0 +1,125 @@
+:root {
+  /* Brand system */
+  --ivory: #faf7f2;
+  --paper: rgba(255, 255, 255, 0.90);
+  --ink: #1f1f1f;
+
+  --primary: #0a1929; /* navy */
+  --gold: #caa44a;
+  --accent: #2a7f7a;
+
+  --border: rgba(0, 0, 0, 0.12);
+  --shadow: 0 20px 45px rgba(0, 0, 0, 0.12);
+
+  --r-lg: 18px;
+  --r-md: 14px;
+  --r-sm: 12px;
+
+  --font-title: "Playfair Display", serif;
+  --font-body: "Inter", system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+  --font-ar: "Cairo", system-ui, sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  color: var(--ink);
+  font-family: var(--font-body);
+
+  /* ✅ Morocco flag background */
+  background-image: url("/morocco-flag.jpg");
+
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+}
+
+/* ✅ Overlay: flag visible (option 2) */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  background: rgba(250, 247, 242, 0.75);
+  backdrop-filter: blur(0.5px);
+  z-index: -1;
+}
+
+/* Arabic */
+[dir="rtl"] {
+  font-family: var(--font-ar);
+}
+
+/* Base */
+a {
+  color: inherit;
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 22px;
+}
+
+/* Headings */
+h1,
+h2,
+h3 {
+  color: var(--primary);
+}
+
+/* Card helper */
+.card,
+.p-card,
+.hero-card,
+.visual-card,
+.admin-form,
+.cart-item {
+  background: var(--paper);
+  border: 1px solid var(--border);
+  border-radius: var(--r-lg);
+  box-shadow: var(--shadow);
+}
+
+/* Buttons (global) */
+.btn-primary {
+  background: var(--gold);
+  color: var(--primary);
+  border: none;
+  padding: 12px 16px;
+  border-radius: var(--r-md);
+  font-weight: 900;
+  cursor: pointer;
+  text-decoration: none;
+  display: inline-block;
+}
+
+.btn-primary:hover {
+  opacity: 0.95;
+}
+
+.btn-outline {
+  background: transparent;
+  border: 1px solid var(--border);
+  color: var(--primary);
+  padding: 12px 16px;
+  border-radius: var(--r-md);
+  font-weight: 900;
+  cursor: pointer;
+  text-decoration: none;
+  display: inline-block;
+}
+
+/* inputs */
+input,
+textarea {
+  font-family: inherit;
+}
