@@ -1,40 +1,72 @@
-const API_BASE = "http://localhost:5000/api";
-const ADMIN_KEY = "MY_SUPER_KEY_123";
+// frontend/src/services/api.js
 
+const API_BASE =
+  import.meta.env.VITE_API_BASE || "http://localhost:5000/api";
+
+const API_ORIGIN =
+  import.meta.env.VITE_API_ORIGIN || "http://localhost:5000";
+
+const ADMIN_KEY =
+  import.meta.env.VITE_ADMIN_KEY || "MY_SUPER_KEY_123";
+
+// Helper: handle JSON + errors
+async function handle(res) {
+  const data = await res.json().catch(() => ({}));
+  if (!res.ok) throw new Error(data.error || data.message || "API Error");
+  return data;
+}
+
+// GET helper
+async function apiGet(path) {
+  const res = await fetch(`${API_BASE}${path}`);
+  return handle(res);
+}
+
+/** ✅ PRODUCTS **/
 export async function getProducts() {
-  const res = await fetch(`${API_BASE}/products`);
-  return res.json();
+  return apiGet("/products");
 }
 
 export async function getProductById(id) {
-  const res = await fetch(`${API_BASE}/products/${id}`);
-  return res.json();
+  return apiGet(`/products/${id}`);
 }
 
+/** ✅ UPLOAD IMAGE (Admin) **/
 export async function uploadImage(file) {
-  const form = new FormData();
-  form.append("image", file);
+  const fd = new FormData();
+  fd.append("image", file);
 
+  // إذا عندك route خاص بالرفع: /api/upload
   const res = await fetch(`${API_BASE}/upload`, {
     method: "POST",
-    headers: { "x-admin-key": ADMIN_KEY },
-    body: form,
+    headers: {
+      "x-admin-key": ADMIN_KEY,
+    },
+    body: fd,
   });
 
-  if (!res.ok) throw new Error("Upload failed");
-  return res.json();
+  const data = await handle(res);
+
+  // رجّع رابط صالح للاستعمال
+  // متوقع يرجع { image_url: "/uploads/xxx.png" } أو { url: "/uploads/..." }
+  const url = data.image_url || data.url || data.path;
+
+  if (!url) throw new Error("Upload response missing image url");
+
+  // إذا كان url relative رجعو absolute
+  if (url.startsWith("http")) return url;
+  return `${API_ORIGIN}${url}`;
 }
 
-export async function createProduct(payload) {
+/** ✅ ADMIN: CREATE PRODUCT **/
+export async function createProduct(formData) {
   const res = await fetch(`${API_BASE}/products`, {
     method: "POST",
     headers: {
-      "Content-Type": "application/json",
       "x-admin-key": ADMIN_KEY,
     },
-    body: JSON.stringify(payload),
+    body: formData,
   });
 
-  if (!res.ok) throw new Error("Create failed");
-  return res.json();
+  return handle(res);
 }

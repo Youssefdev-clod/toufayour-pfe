@@ -55,3 +55,4 @@ FROM dbo.products;
 UPDATE dbo.products
 SET image_url = 'https://images.unsplash.com/photo-1606313564200-e75d5e30476c?w=1200'
 WHERE id = 1;
+
