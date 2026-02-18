@@ -1,0 +1,13 @@
+:root {
+  /* Colors */
+  --color-primary: #0B1C2D;     /* Royal Blue */
+  --color-secondary: #C9A24D;   /* Gold */
+  --color-background: #F8F5F0;  /* Ivory */
+  --color-accent: #7A1F2B;      /* Bordeaux */
+  --color-text-dark: #1E1E1E;
+  --color-text-light: #FFFFFF;
+
+  /* Fonts */
+  --font-title: 'Playfair Display', serif;
+  --font-body: 'Poppins', sans-serif;
+}

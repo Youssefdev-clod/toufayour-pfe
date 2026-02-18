@@ -5,10 +5,10 @@ const cors = require("cors");
 const path = require("path");
 
 const db = require("./config/db");
-const ordersRoutes = require("./routes/orders.routes");
 
 // Routes
 const productsRoutes = require("./routes/products.routes");
+const ordersRoutes = require("./routes/orders.routes");
 const uploadRoutes = require("./routes/upload.routes"); // إذا عندك upload
 
 const app = express();
@@ -35,6 +35,7 @@ db.query("SELECT 1 AS test")
    Routes
 ========================= */
 app.use("/api/products", productsRoutes);
+app.use("/api/orders", ordersRoutes);
 app.use("/api/upload", uploadRoutes); // إذا عندك route upload
 
 // Health check

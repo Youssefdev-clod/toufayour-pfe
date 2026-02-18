@@ -1,0 +1,136 @@
+@startuml
+class agents {
+    + id Integer (PK)
+    + email String
+    + password String
+    + name String
+    + role String
+    + is_active Boolean
+}
+
+class product_units {
+    + id Integer (PK)
+    + name String
+}
+
+class products {
+    + id Integer (PK)
+    + image_url String
+    + is_active Boolean
+    + created_at Date
+    + updated_at Date
+    + created_by INT (FK)
+    + updated_by INT (FK)
+}
+
+class product_units_prices {
+   + id Integer (PK)
+   + unit_id Integer (FK)
+   + product_id Integer (FK)
+   + price_per_unit Decimal
+}
+
+class packages {
+   + id Integer (PK)
+   + price Decimal
+   + image_url String
+   + is_active Boolean
+   + created_at Date
+   + updated_at Date
+   + created_by INT (FK)
+   + updated_by INT (FK)
+}
+
+class package_products {
+   + id Integer (PK)
+   + product_id Integer (FK)
+   + unit_id Integer (FK)
+   + package_id Integer (FK)
+   + quantity Decimal
+}
+
+class languages {
+    + id INT (PK)
+    + language_code String
+    + name String
+}
+
+class product_translations {
+    + id INT (PK)
+    + product_id Integer (FK)
+    + language_id Integer (FK)
+    + title String
+    + description String
+}
+
+
+class package_translations {
+    + id INT (PK)
+    + package_id Integer (FK)
+    + language_id Integer (FK)
+    + title String
+    + description String
+}
+
+
+class orders {
+    + id Integer (PK)
+    + name String
+    + email String
+    + phone String
+    + total_price Decimal
+    + status String
+    + is_active Boolean
+    + created_at Date
+    + updated_at Date
+    + created_by Integer (FK)
+    + updated_by Integer (FK)
+}
+
+class order_products {
+    + id Integer (PK)
+    + order_id Integer (FK)
+    + product_id Integer (FK)
+    + quantity Decimal
+    + price_per_unit Decimal
+}
+
+class order_packages {
+    + id Integer (PK)
+    + order_id Integer (FK)
+    + package_id Integer (FK)
+    + quantity Decimal
+    + price_per_unit Decimal
+}
+
+products --> agents : created_by
+products --> agents : updated_by
+
+orders --> agents : created_by
+orders --> agents : updated_by
+
+packages --> agents : created_by
+packages --> agents : updated_by
+
+product_units_prices --> product_units : unit_id
+
+product_units_prices --> products : product_id
+
+
+product_translations --> products : product_id
+product_translations --> languages : language_id
+
+package_translations --> packages : package_id
+package_translations --> languages : language_id
+
+order_products ..> orders : order_id
+order_products ..> products : product_id
+
+order_packages ..> orders : order_id
+order_packages ..> packages : package_id
+
+package_products ..> packages : package_id
+package_products ..> products : product_id
+
+package_products --> product_units : unit_id
+@enduml

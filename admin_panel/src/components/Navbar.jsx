@@ -10,15 +10,14 @@ export default function Navbar({ lang, setLang }) {
       <div className="nav__inner">
         <Link className="nav__brand" to="/">
           <div className="nav__logo">T</div>
-          <div className="nav__name">TOUFAYOUR</div>
+          <div className="nav__name">TOUFAYOUR ADMIN</div>
         </Link>
 
         <nav className="nav__links">
-          <NavLink to="/" end>{lang === "ar" ? "الرئيسية" : "Accueil"}</NavLink>
-          <NavLink to="/products">{lang === "ar" ? "المنتجات" : "Produits"}</NavLink>
-          <NavLink to="/panier" className="nav__cartLink">
-            {lang === "ar" ? "السلة" : "Panier"}
-            {count > 0 && <span className="nav__badge">{count}</span>}
+          <NavLink to="/orders" end>{lang === "ar" ? "--" : "Commandes"}</NavLink>
+          <NavLink to="/products">{lang === "ar" ? "--" : "Produits"}</NavLink>
+          <NavLink to="/agents" className="nav__cartLink">
+            {lang === "ar" ? "السلة" : "Agents"}
           </NavLink>
         </nav>
 

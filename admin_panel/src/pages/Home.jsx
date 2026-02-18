@@ -17,7 +17,7 @@ export default function Home({ lang, setLang }) {
             <div className="brand-badge">
               <div className="brand-logo">T</div>
               <div>
-                <h1 className="brand-name">TOUFAYOUR CHOCOLATE</h1>
+                <h1 className="brand-name">TOUFAYOUR ADMIN</h1>
                 <p className="brand-sub">
                   {lang === "ar"
                     ? "شوكولاتة مغربية حرفية بجودة عالية"

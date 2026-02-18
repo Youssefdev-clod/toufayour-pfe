@@ -1,0 +1,94 @@
+.nav {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  background: rgba(250, 247, 242, 0.92);
+  border-bottom: 1px solid rgba(0,0,0,0.06);
+  backdrop-filter: blur(8px);
+}
+
+.nav__inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 14px 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.nav__brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  text-decoration: none;
+  color: inherit;
+}
+
+.nav__logo {
+  width: 40px;
+  height: 40px;
+  border-radius: 12px;
+  background: #0b1d2a;
+  color: #fff;
+  display: grid;
+  place-items: center;
+  font-weight: 900;
+}
+
+.nav__name {
+  font-weight: 900;
+  letter-spacing: 0.5px;
+}
+
+.nav__links {
+  display: flex;
+  gap: 18px;
+  align-items: center;
+}
+
+.nav__links a {
+  text-decoration: none;
+  color: rgba(11, 29, 42, 0.85);
+  font-weight: 700;
+}
+
+.nav__links a.active {
+  color: #0b1d2a;
+  text-decoration: underline;
+  text-underline-offset: 6px;
+}
+
+.nav__actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.nav__pill {
+  border: 1px solid rgba(0,0,0,0.16);
+  background: #fff;
+  padding: 8px 12px;
+  border-radius: 999px;
+  font-weight: 900;
+  cursor: pointer;
+}
+
+.nav__cartLink {
+  position: relative;
+  padding-right: 6px;
+}
+
+.nav__badge {
+  display: inline-grid;
+  place-items: center;
+  min-width: 18px;
+  height: 18px;
+  padding: 0 6px;
+  border-radius: 999px;
+  background: #caa24a;
+  color: #0b1d2a;
+  font-size: 12px;
+  font-weight: 900;
+  margin-left: 8px;
+}

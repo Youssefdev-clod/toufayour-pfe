@@ -1,8 +1,17 @@
+BEGIN TRY
+    BEGIN TRANSACTION;
 
-CREATE DATABASE toufayour_db;
-
-ALTER DATABASE toufayour_db
-COLLATE Latin1_General_100_CI_AI_SC_UTF8;
+IF OBJECT_ID('dbo.migrations_history', 'U') IS NULL
+BEGIN
+  CREATE TABLE migrations_history (
+      id INT IDENTITY(1,1) PRIMARY KEY,
+      filename NVARCHAR(255) NOT NULL,
+      checksum CHAR(64) NOT NULL,       -- SHA-256 hash of the SQL file
+      applied_at DATETIME2 NOT NULL DEFAULT SYSDATETIME(),
+      applied_by NVARCHAR(255) NOT NULL, -- e.g., current user or process
+      CONSTRAINT UQ_migration_file UNIQUE(filename)
+  );
+END
 
 IF OBJECT_ID('dbo.agents', 'U') IS NULL
 BEGIN
@@ -14,16 +23,17 @@ BEGIN
     role NVARCHAR(255) NOT NULL,
     is_active BIT NOT NULL DEFAULT 1,
     CONSTRAINT UQ_agents_email UNIQUE (email),
-    CONSTRAINT CK_admin_roles (CHECK role IN ('SUPERADMIN', 'ADMIN', 'ORDER MANAGER', 'PRODUCT MANAGER', 'SUPPORT', 'MARKETING'))
-
+    CONSTRAINT CK_admin_roles CHECK (role IN ('SUPERADMIN', 'ADMIN', 'ORDER MANAGER', 'PRODUCT MANAGER', 'SUPPORT', 'MARKETING'))
   );
 END
 
+IF OBJECT_ID('dbo.product_units', 'U') IS NULL
+BEGIN
 CREATE TABLE product_units (
     id INT IDENTITY(1,1) PRIMARY KEY,
     name NVARCHAR(50) UNIQUE NOT NULL
 );
-
+END;
 
 IF OBJECT_ID('dbo.products', 'U') IS NULL
 BEGIN
@@ -185,8 +195,7 @@ BEGIN
         FOREIGN KEY (updated_by)
         REFERENCES dbo.agents(id),
 
-    CONSTRAINT CK_orders_status 
-      CHECK (status IN ('WAITING','CONFIRMED','IN PROGRESS','DELIVERED','CANCELED'))
+    CONSTRAINT CK_orders_status CHECK (status IN ('WAITING','CONFIRMED','IN PROGRESS','DELIVERED','CANCELED'))
   );
 END
 
@@ -196,7 +205,7 @@ BEGIN
     order_id INT NOT NULL,
     product_id INT NOT NULL,
     quantity DECIMAL(10, 2) NOT NULL,
-    price_per_unit DECIMAL(10,2) NOT NULL, /* product price might change so we have to store it in order */ 
+    price_per_unit DECIMAL(10,2) NOT NULL, -- product price might change so we have to store it in order 
     created_at DATETIME2 NOT NULL DEFAULT SYSDATETIME(),
     updated_at DATETIME2 NOT NULL DEFAULT SYSDATETIME(),
 
@@ -218,7 +227,7 @@ BEGIN
     order_id INT NOT NULL,
     package_id INT NOT NULL,
     quantity DECIMAL(10, 2) NOT NULL,
-    price_per_unit DECIMAL(10,2) NOT NULL, /* package price might change so we have to store it in order */ 
+    price_per_unit DECIMAL(10,2) NOT NULL, -- package price might change so we have to store it in order 
     created_at DATETIME2 NOT NULL DEFAULT SYSDATETIME(),
     updated_at DATETIME2 NOT NULL DEFAULT SYSDATETIME(),
 
@@ -233,6 +242,9 @@ BEGIN
       CHECK (quantity > 0.0)
   );
 END
+
+
+
 
 CREATE INDEX IX_products_is_active ON dbo.products(is_active);
 CREATE INDEX IX_packages_is_active ON dbo.packages(is_active);
@@ -268,3 +280,20 @@ CREATE INDEX IX_orders_products_order_id
 ON dbo.orders_products(order_id);
 CREATE INDEX IX_orders_packages_order_id
 ON dbo.orders_packages(order_id);
+
+COMMIT TRANSACTION;
+END TRY
+BEGIN CATCH
+    -- Rollback if anything fails
+    IF @@TRANCOUNT > 0
+        ROLLBACK TRANSACTION;
+
+    -- Raise error to see what happened
+    DECLARE @ErrorMessage NVARCHAR(4000), @ErrorSeverity INT, @ErrorState INT;
+    SELECT 
+        @ErrorMessage = ERROR_MESSAGE(),
+        @ErrorSeverity = ERROR_SEVERITY(),
+        @ErrorState = ERROR_STATE();
+
+    RAISERROR (@ErrorMessage, @ErrorSeverity, @ErrorState);
+END CATCH;
