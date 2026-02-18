@@ -1,6 +1,7 @@
 BEGIN TRY
     BEGIN TRANSACTION;
 
+-- already created in migration file, but just kept it here for visibility
 IF OBJECT_ID('dbo.migrations_history', 'U') IS NULL
 BEGIN
   CREATE TABLE migrations_history (
@@ -8,7 +9,7 @@ BEGIN
       filename NVARCHAR(255) NOT NULL,
       checksum CHAR(64) NOT NULL,       -- SHA-256 hash of the SQL file
       applied_at DATETIME2 NOT NULL DEFAULT SYSDATETIME(),
-      applied_by NVARCHAR(255) NOT NULL, -- e.g., current user or process
+      applied_by NVARCHAR(255) NOT NULL, -- current db user
       CONSTRAINT UQ_migration_file UNIQUE(filename)
   );
 END
