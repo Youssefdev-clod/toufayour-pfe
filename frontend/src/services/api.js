@@ -73,3 +73,11 @@ export async function createProduct(formData) {
 
   return handle(res);
 }
+export async function createOrder(payload) {
+  const res = await fetch(`${API_BASE}/orders`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(payload),
+  });
+  return handle(res);
+}
