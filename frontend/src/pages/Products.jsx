@@ -1,65 +1,51 @@
-import { useEffect, useState } from "react";
-import Navbar from "../components/Navbar";
-import Footer from "../components/Footer";
-import ProductCard from "../components/ProductCard";
-import "./Products.css";
-import { getProducts } from "../services/api";
+import { useEffect, useState } from 'react';
+import ProductCard from '../components/ProductCard';
+import { getProducts } from '../services/productService';
+// import './Products.css'; // si vous utilisez un fichier CSS séparé
 
-export default function Products({ lang, setLang }) {
+export default function Products({ lang }) {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [err, setErr] = useState("");
+  const [error, setError] = useState('');
 
   useEffect(() => {
     let mounted = true;
 
-    (async () => {
+    const fetchProducts = async () => {
       try {
         setLoading(true);
-        setErr("");
+        setError('');
         const data = await getProducts();
         if (!mounted) return;
-        setProducts(Array.isArray(data) ? data : []);
-      } catch (e) {
+        setProducts(data.products || []);
+      } catch (err) {
         if (!mounted) return;
-        setErr(e.message || "Error");
+        setError(err.message || 'Erreur lors du chargement');
       } finally {
-        if (mounted) setLoading(false);
+        setLoading(false);
       }
-    })();
+    };
+
+    fetchProducts();
 
     return () => {
       mounted = false;
     };
   }, []);
 
+  if (loading) return <div className="text-center mt-10">Chargement...</div>;
+  if (error) return <div className="text-center mt-10 text-red-600">Erreur : {error}</div>;
+
   return (
-    <div className="zellige-bg" id="produits">
-      <Navbar lang={lang} setLang={setLang} />
-
-      <div className="p-container">
-        <div className="p-head">
-          <h1>{lang === "ar" ? "المنتجات" : "Produits"}</h1>
-          <p>
-            {lang === "ar"
-              ? "هنا المنتجات اللي كيضيفها الأدمن."
-              : "Ici, les produits ajoutés par l’admin."}
-          </p>
-        </div>
-
-        {loading && (
-          <p style={{ opacity: 0.8 }}>{lang === "ar" ? "تحميل..." : "Chargement..."}</p>
-        )}
-        {err && <p style={{ color: "crimson" }}>{err}</p>}
-
-        <div className="p-grid">
-          {products.map((p) => (
-            <ProductCard key={p.id} lang={lang} product={p} />
-          ))}
-        </div>
+    <div className="container mx-auto px-4 py-8">
+      <h1 className="text-3xl font-bold text-center mb-8">
+        {lang === 'ar' ? 'منتجاتنا' : 'Nos Produits'}
+      </h1>
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+        {products.map((product) => (
+          <ProductCard key={product.id} product={product} />
+        ))}
       </div>
-
-      <Footer lang={lang} />
-    </div>  
+    </div>
   );
 }

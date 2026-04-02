@@ -1,40 +1,33 @@
-import { Link } from "react-router-dom";
-import "./ProductCard.css";
-import { useCart } from "../context/CartContext";
+import { Link } from 'react-router-dom';
+import { useCart } from '../context/CartContext';
 
-const API_ORIGIN = import.meta.env.VITE_API_ORIGIN || "http://localhost:5000";
-
-function normalizeImage(url) {
-  if (!url) return "https://via.placeholder.com/600x400?text=TOUFAYOUR";
-  if (url.startsWith("http")) return url;
-  return `${API_ORIGIN}${url}`; // /uploads/xx => http://localhost:5000/uploads/xx
-}
-
-export default function ProductCard({ lang, product }) {
+export default function ProductCard({ product }) {
   const { addToCart } = useCart();
 
-  const title = lang === "ar" ? product.title_ar : product.title_fr;
-  const img = normalizeImage(product.image_url);
-
   return (
-    <div className="p-card">
-      <div className="p-img">
-        <img src={img} alt={title} />
-      </div>
-
-      <div className="p-body">
-        <h3 className="p-title">{title}</h3>
-        <p className="p-price">{Number(product.price || 0).toFixed(2)} MAD</p>
-
-        <div className="p-actions">
-          <Link className="p-btn outline" to={`/products/${product.id}`}>
-            {lang === "ar" ? "التفاصيل" : "Détails"}
-          </Link>
-
-          <button className="p-btn solid" onClick={() => addToCart(product, 1)}>
-            {lang === "ar" ? "أضف للسلة" : "Ajouter"}
-          </button>
+    <div className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition">
+      <Link to={`/products/${product.id}`}>
+        <img
+          src={product.image_url || '/placeholder.jpg'}
+          alt={product.name}
+          className="w-full h-48 object-cover"
+        />
+        <div className="p-4">
+          <h3 className="font-bold text-lg mb-2">{product.name}</h3>
+          <p className="text-gray-600 text-sm mb-4">{product.description}</p>
+          <div className="flex justify-between items-center">
+            <span className="text-chocolate-600 font-bold">{product.price} DH</span>
+            <span className="text-gray-500 text-sm">Détails</span>
+          </div>
         </div>
+      </Link>
+      <div className="px-4 pb-4">
+        <button
+          onClick={() => addToCart(product)}
+          className="w-full bg-chocolate-500 text-white py-2 rounded hover:bg-chocolate-600 transition"
+        >
+          Ajouter au panier
+        </button>
       </div>
     </div>
   );

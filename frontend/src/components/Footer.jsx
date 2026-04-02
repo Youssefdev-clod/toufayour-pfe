@@ -1,17 +1,12 @@
 export default function Footer({ lang }) {
+  const currentYear = new Date().getFullYear();
+
   return (
-    <footer
-      style={{
-        marginTop: 40,
-        padding: "20px 16px",
-        borderTop: "1px solid rgba(0,0,0,0.06)",
-        background: "rgba(250,247,242,0.85)",
-      }}
-    >
-      <div style={{ maxWidth: 1200, margin: "0 auto", display: "flex", justifyContent: "space-between", gap: 16, flexWrap: "wrap" }}>
-        <div style={{ fontWeight: 900 }}>TOUFAYOUR</div>
-        <div style={{ opacity: 0.75 }}>
-          {lang === "ar" ? "جميع الحقوق محفوظة" : "Tous droits réservés"} © {new Date().getFullYear()}
+    <footer className="bg-[#faf7f2] bg-opacity-85 border-t border-black/10 py-5 px-4 mt-auto">
+      <div className="max-w-6xl mx-auto flex flex-col sm:flex-row justify-between items-center gap-4">
+        <div className="font-black text-lg text-gray-800">TOUFAYOUR</div>
+        <div className="text-gray-600 text-sm opacity-75">
+          {lang === 'ar' ? 'جميع الحقوق محفوظة' : 'Tous droits réservés'} © {currentYear}
         </div>
       </div>
     </footer>
